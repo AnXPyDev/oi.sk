@@ -40,6 +40,6 @@ for i in range(0, line0[1]):
                 break   
             e += 1
 
-    print(shirts[0][0])
+    print(shirts[0][0], " ", i / line0[1])
             
 
