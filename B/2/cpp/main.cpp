@@ -20,7 +20,7 @@ int posInAlphabet(char c) {
 	return 0;
 }
 
-int maximums[27] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int maximums[27] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 
 vector<Word> words;
 
@@ -32,7 +32,10 @@ Word newWord(string value, int index) {
 }
 
 int GetBestSuccession(int index) {	
-	int max = maximums[posInAlphabet(words[index].border[0])] = maximums[posInAlphabet(words[index].border[1])] + 1;
+	int max = maximums[posInAlphabet(words[index].border[1])] + 1;
+	if(max > maximums[posInAlphabet(words[index].border[0])]) {
+		maximums[posInAlphabet(words[index].border[0])] = max;
+	}
 	return max;
 }
 
@@ -61,7 +64,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	cout << max << '\n';
+	cout << max - 1 << '\n';
 	
 
 	
