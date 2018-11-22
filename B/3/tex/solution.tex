@@ -1,4 +1,7 @@
 \documentclass{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+
 
 \begin{document}
 
@@ -6,5 +9,21 @@
 \author{Jozef Komáromy}
 
 \maketitle
+
+\section{Podmienky pre funkciu algoritmu}
+
+Po načítaní súboru si všetky slová zoradíme do listu.
+Taktiež potrebujeme premennú so všetkými písmenamy abecedy v stringu.
+
+\section{Hlavný algoritmus}
+\subsection{Cyklus}
+Pre každé slovo od predposledného slova porovnávame jeho jednotlivé písmená so slovom o jedno miesto za ním.
+\subsection{Porovnávanie}
+Ak nájdeme nezhodu v písmenách slov na tom istom indexe stringu, tak v premennej abecedy presunieme nezhodné písmeno z teraz porovnávaného slova pred na index nezhodného písmena zo slova ku ktorému porovnávame, potom pokračujeme na ďalšie slovo.
+
+Ak nenájdeme nezhodu a dostaneme sa ku koncu jedného zo slov, nemeníme poradie abecedy, ale pokračujeme na ďalší pár slov.
+
+\section{Ukončenie programu}
+Po ukončení algoritmu vytlačíme premennú abecedy.
 
 \end{document}
