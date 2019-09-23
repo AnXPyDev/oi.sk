@@ -19,30 +19,81 @@ vector<string> split(string input, string delimiter) {
 	return result;
 }
 
-int get_distance(vector<int> steps, int current_step, int target_step) {
+vector<int> steps;
+vector<vector<int>> step_possibilities;
+int step_count;
+int max_height;
+int counter;
+
+int get_distance(int current_step, int target_step) {
   int distance = 0;
-  for(int i = current_step; i < target_step; i++) {
+  for(int i = current_step; i < target_step + 1; i++) {
     distance += steps[i];
   }
   return distance;
 }
 
-void count_solutions(int* counter, vector<int> steps, int max_height, int current_step = 0) {
-  int step_count = steps.size();
-  int target_step = current_step + 1;
-
-  if (current_step == step_count) {
-    (*counter) ++;
-    return;
-  }
-
-  while (get_distance(steps, current_step, target_step) <= max_height) {
-    count_solutions(counter, steps, max_height, target_step);
+vector<int> get_possible_steps(int current_step) {
+  vector<int> result;
+  int target_step = current_step;
+  while (target_step < step_count && get_distance(current_step, target_step) <= max_height) {
     target_step ++;
+    result.push_back(target_step);
     if (target_step > step_count) {
       break;
     }
   }
+  return result;
+}
+
+void traverse_tree() {
+  int last_idx = 0;
+  vector<vector<int>*> stack;
+  vector<int> firstv({0,0});
+  stack.push_back(&firstv);
+  cout << &stack << "\n" << stack.back();
+
+  while(true) {
+
+    if(stack.size() == 0) {
+      break;
+    }
+
+    auto current = stack.back();
+
+
+
+    int current_max = step_possibilities[(*current)[0]].size();
+
+    if ((*current)[1] == current_max) {
+      stack.pop_back();
+      continue;
+    }
+
+    if (step_possibilities[(*current)[0]][(*current)[1]] == step_count) {
+      counter++;
+      (*current)[1]++;
+    } else {
+      vector<int> __otherv({step_possibilities[(*current)[0]][(*current)[1]++], 0});
+      stack.push_back(&__otherv);
+    }
+
+  }
+}
+
+void count_solutions() {
+  for(int i = 0; i < step_count; i++) {
+    cout << i << "\n" << "  ";
+    auto ps = get_possible_steps(i);
+    step_possibilities.push_back(ps);
+    for(int e = 0; e < ps.size(); e++) {
+      cout << ps[e] << " ";
+    }
+    cout << "\n";
+  }
+
+  traverse_tree();
+
 }
 
 int main(int argc, char** argv) {
@@ -58,19 +109,19 @@ int main(int argc, char** argv) {
   }
 
   vector<string> steps_s = split(file[1], " ");
-  vector<int> steps;
   for (int i = 0; i < steps_s.size(); i++) {
     steps.push_back(stoi(steps_s[i]));
   }
 
   vector<string> l1 = split(file[0], " ");
-  int max_height = stoi(l1[1]);
 
-  int solution_count = 0;
+  max_height = stoi(l1[1]);
+  step_count = steps.size();
+  counter = 0;
 
-  count_solutions(&solution_count, steps, max_height);
+  count_solutions();
 
-  cout << solution_count % (1000000000 + 7) << "\n";
+  cout << "\nresult: " << counter % (1000000000 + 7) << "\n";
 
   return 0;
 }
