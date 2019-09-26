@@ -50,8 +50,7 @@ void traverse_tree() {
   int last_idx = 0;
   vector<vector<int>*> stack;
   vector<int> firstv({0,0});
-  stack.push_back(&firstv);
-  cout << &stack << "\n" << stack.back();
+  stack.push_back(new vector<int>({0,0}));
 
   while(true) {
 
@@ -59,37 +58,33 @@ void traverse_tree() {
       break;
     }
 
-    auto current = stack.back();
+    vector<int>& current = *(stack.back());
 
+    int current_max = step_possibilities[current[0]].size();
 
+    cout << current[0] << " " << current[1] << " " << counter << "\n";
 
-    int current_max = step_possibilities[(*current)[0]].size();
-
-    if ((*current)[1] == current_max) {
+    if (current[1] == current_max) {
+      delete stack.back();
       stack.pop_back();
       continue;
     }
 
-    if (step_possibilities[(*current)[0]][(*current)[1]] == step_count) {
+    if (step_possibilities[current[0]][current[1]] == step_count) {
       counter++;
-      (*current)[1]++;
+      current[1]++;
     } else {
-      vector<int> __otherv({step_possibilities[(*current)[0]][(*current)[1]++], 0});
-      stack.push_back(&__otherv);
+      stack.push_back(new vector<int>({step_possibilities[current[0]][current[1]++], 0}));
     }
+    
 
   }
 }
 
 void count_solutions() {
   for(int i = 0; i < step_count; i++) {
-    cout << i << "\n" << "  ";
     auto ps = get_possible_steps(i);
     step_possibilities.push_back(ps);
-    for(int e = 0; e < ps.size(); e++) {
-      cout << ps[e] << " ";
-    }
-    cout << "\n";
   }
 
   traverse_tree();

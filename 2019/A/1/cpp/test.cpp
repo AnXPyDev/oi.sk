@@ -3,18 +3,22 @@
 
 using namespace std;
 
+int x;
+
 int main() {
   vector<vector<int>*> stack;
-  vector<int> ivec({0,0});
-  
-  stack.push_back(&ivec);
-  
-  for(int i = 0; i < 10; i++) {
-    vector<int> last = *(stack.back());
-    cout << last[0] << " " << last[1] << " ";
-    last[0] ++;
-    last[1] += 2;
-    cout << last[0] << " " << last[1] << "\n";
+  stack.push_back(new vector<int>({0,0}));
+  cout << &stack << "\n" << stack.back();
+
+  for(int i = 0; i < 100; i++) {
+    if(stack.size() == 0) {
+      break;
+    }
+
+    vector<int>& current = *(stack.back());
+
+    cout << current[0] << " " << current[1] << "\n";
+
+    stack.push_back(new vector<int>({i, i}));
   }
-  return 0;
 }
