@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -19,76 +20,76 @@ vector<string> split(string input, string delimiter) {
 	return result;
 }
 
-vector<int> steps;
-vector<vector<int>> step_possibilities;
+
+int max_step_height;
 int step_count;
-int max_height;
-int counter;
+long counter;
+int overflow;
 
-int get_distance(int current_step, int target_step) {
-  int distance = 0;
-  for(int i = current_step; i < target_step + 1; i++) {
-    distance += steps[i];
-  }
-  return distance;
-}
 
-vector<int> get_possible_steps(int current_step) {
-  vector<int> result;
-  int target_step = current_step;
-  while (target_step < step_count && get_distance(current_step, target_step) <= max_height) {
-    target_step ++;
-    result.push_back(target_step);
-    if (target_step > step_count) {
-      break;
+struct Step {
+  int height;
+  int index;
+  bool is_solved;
+  long long int solution_count;
+  vector<Step*> reachable;
+  bool is_end;
+  
+  Step(int index, int height) {
+    this->index = index;
+    this->height = height;
+    this->is_solved = false;
+    this->solution_count = 0;
+    this->is_end = false;
+  };
+
+  void get_reachable();
+  long long int get_solution_count();
+  void identify();
+  
+};
+
+vector<Step*> steps;
+
+void Step::get_reachable() {
+  this->identify();
+  if(this->index == step_count - 1) {
+    cout << "is the last one\n";
+    this->is_end = true;
+  } else {
+    cout << "found reachable steps: ";
+    int height = 0;
+    for(int i = this->index; i < step_count; i++) {
+      if (steps[i]->height + height <= max_step_height && i + 1 < step_count) {
+        cout << i + 1 << ", ";
+        this->reachable.push_back(steps[i + 1]);
+        height += steps[i]->height;
+      } else {
+        break;
+      }
     }
-  }
-  return result;
-}
-
-void traverse_tree() {
-  int last_idx = 0;
-  vector<vector<int>*> stack;
-  vector<int> firstv({0,0});
-  stack.push_back(new vector<int>({0,0}));
-
-  while(true) {
-
-    if(stack.size() == 0) {
-      break;
-    }
-
-    vector<int>& current = *(stack.back());
-
-    int current_max = step_possibilities[current[0]].size();
-
-    cout << current[0] << " " << current[1] << " " << counter << "\n";
-
-    if (current[1] == current_max) {
-      delete stack.back();
-      stack.pop_back();
-      continue;
-    }
-
-    if (step_possibilities[current[0]][current[1]] == step_count) {
-      counter++;
-      current[1]++;
-    } else {
-      stack.push_back(new vector<int>({step_possibilities[current[0]][current[1]++], 0}));
-    }
-    
-
+    cout << "\n";
   }
 }
 
-void count_solutions() {
-  for(int i = 0; i < step_count; i++) {
-    auto ps = get_possible_steps(i);
-    step_possibilities.push_back(ps);
+long long int Step::get_solution_count() {
+  this->identify(); cout << "getting solution count\n";
+  if(!this->is_solved) {
+    for(int i = 0; i < this->reachable.size(); i++) {
+      if(this->reachable[i]->is_end) {
+        this->solution_count++;
+      } else {
+        this->solution_count += this->reachable[i]->get_solution_count();
+      }
+    }
+    this->is_solved = true;
   }
+  this->identify(); cout << "returning " << this->solution_count << "\n";
+  return this->solution_count % overflow;
+}
 
-  traverse_tree();
-
+void Step::identify() {
+  cout << "Step " << this->index << " (" << this->height << ", " << (this->is_solved ? "solved" : "not solved") << ", " << (this->is_end ? "last" : "not last") << ") ";
 }
 
 int main(int argc, char** argv) {
@@ -105,18 +106,24 @@ int main(int argc, char** argv) {
 
   vector<string> steps_s = split(file[1], " ");
   for (int i = 0; i < steps_s.size(); i++) {
-    steps.push_back(stoi(steps_s[i]));
+    steps.push_back(new Step(i, stoi(steps_s[i])));
   }
-
+  steps.push_back(new Step(steps.size(), 0));
+  
   vector<string> l1 = split(file[0], " ");
 
-  max_height = stoi(l1[1]);
+  overflow = 1000000007;
+
+  max_step_height = stoi(l1[1]);
   step_count = steps.size();
   counter = 0;
 
-  count_solutions();
+  for (int i = 0; i < steps.size(); i++) {
+    steps[i]->get_reachable();
+  }
 
-  cout << "\nresult: " << counter % (1000000000 + 7) << "\n";
+  cout << steps[0]->get_solution_count() << "\n";
+
 
   return 0;
 }
