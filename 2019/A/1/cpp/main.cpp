@@ -52,28 +52,28 @@ struct Step {
 vector<Step*> steps;
 
 void Step::get_reachable() {
-  this->identify();
+  //this->identify();
   if(this->index == step_count - 1) {
-    cout << "is the last one\n";
+    //cout << "is the last one\n";
     this->is_end = true;
   } else {
-    cout << "found reachable steps: ";
+    //cout << "found reachable steps: ";
     int height = 0;
     for(int i = this->index; i < step_count; i++) {
       if (steps[i]->height + height <= max_step_height && i + 1 < step_count) {
-        cout << i + 1 << ", ";
+        //cout << i + 1 << ", ";
         this->reachable.push_back(steps[i + 1]);
         height += steps[i]->height;
       } else {
         break;
       }
     }
-    cout << "\n";
+    //cout << "\n";
   }
 }
 
 long long int Step::get_solution_count() {
-  this->identify(); cout << "getting solution count\n";
+  //this->identify(); cout << "getting solution count\n";
   if(!this->is_solved) {
     for(int i = 0; i < this->reachable.size(); i++) {
       if(this->reachable[i]->is_end) {
@@ -84,7 +84,7 @@ long long int Step::get_solution_count() {
     }
     this->is_solved = true;
   }
-  this->identify(); cout << "returning " << this->solution_count << "\n";
+  //this->identify(); cout << "returning " << this->solution_count << "\n";
   return this->solution_count % overflow;
 }
 
