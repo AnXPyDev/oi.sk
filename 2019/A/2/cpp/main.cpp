@@ -38,11 +38,13 @@ int solve_ammount_greedy(int ammount, vector<int> notes) {
 
 int solve_ammount_recursive(int ammount, vector<int> notes, int depth = 0, int* min_solution = NULL) {
   if (min_solution == NULL) {
-    min_solution = new int(ammount);
+    min_solution = new int(solve_ammount_greedy(ammount, notes));
   }
 
+  cout << depth << "\n";
+
   if (*min_solution < depth + 2) {
-    goto skip;
+    return *min_solution;
   }
 
   for (auto it = notes.begin(); it < notes.end(); ++it) {
@@ -53,7 +55,7 @@ int solve_ammount_recursive(int ammount, vector<int> notes, int depth = 0, int* 
       solve_ammount_recursive(ammount - *it, notes, depth + 1, min_solution);
     }
   }
- skip:;
+
   return *min_solution;
 }
 

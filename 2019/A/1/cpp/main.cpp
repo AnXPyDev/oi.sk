@@ -1,6 +1,4 @@
-
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
 
@@ -89,19 +87,14 @@ long long int Step::get_solution_count() {
 }
 
 void Step::identify() {
-  cout << "Step " << this->index << " (" << this->height << ", " << (this->is_solved ? "solved" : "not solved") << ", " << (this->is_end ? "last" : "not last") << ") ";
+  //cout << "Step " << this->index << " (" << this->height << ", " << (this->is_solved ? "solved" : "not solved") << ", " << (this->is_end ? "last" : "not last") << ") ";
 }
 
 int main(int argc, char** argv) {
   vector<string> file;
-  ifstream input_file;
   
-  input_file.open(argv[1]);
-
-  while(!input_file.eof()) {
-    string LINE;
-    getline(input_file, LINE);
-    file.push_back(LINE);
+  for (string line; getline(cin, line);) {
+    file.push_back(string(line));
   }
 
   vector<string> steps_s = split(file[1], " ");
