@@ -25,7 +25,6 @@ function koniec(u, k)
   end
   table.insert(mozne_ukoncenia, {u, k})
 end
-  
 
 function spocitaj_moznosti(u, k, krok)
   if krok > q then
@@ -36,7 +35,6 @@ function spocitaj_moznosti(u, k, krok)
     spocitaj_moznosti(u - 1, urovne[u][k], krok + 1)
   else
     if u + 1 > n then
-      koniec(u, k)
       return
     end
     for j, x in ipairs(urovne[u + 1]) do
