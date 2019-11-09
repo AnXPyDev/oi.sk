@@ -40,19 +40,21 @@ int main(int argc, char** argv) {
   
 
   uintmax_t rectangle_count = 0;
-  uintmax_t max_area = 0;
   uintmax_t max_rectangle_count = 0;
 
   uintmax_t max = columns.size() * columns[0];
+  uintmax_t max_area = 0;
+  
 
   for (uintmax_t x = 1; x <= column_count; ++x) {
     rectangle_count += columns[x - 1];
     uintmax_t area = x * columns[x - 1];
-    if (area == max_area) {
-      ++max_rectangle_count;
-    } else if (area > max_area) {
+    if (area > max_area) {
       max_area = area;
-      max_rectangle_count = 1;
+    }
+
+    if (x == column_count || columns[x] < columns[x - 1]) {
+      ++max_rectangle_count;
     }
   }
 
