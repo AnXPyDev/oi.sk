@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{listings}
+
+\geometry{margin=0.75in}
+
+
+\begin{document}
+
+\title{Riešenie 3. úlohy kategórie B}
+\author{Jozef Komáromy}
+
+\maketitle
+
+\lstset{
+  numberstyle=\small,
+  frame=single,
+  language={[5.0]Lua}
+}
+
+\section{Súťažná úloha}
+
+Tento program je zapísaný v jazyku Lua, \textbf{v ktorom jazyku sa indexy množín začínajú od 1}.
+
+
+\subsection{Inicializácia premenných podľa zadania}
+
+\begin{lstlisting}
+local n, urovne, u, k, q, pohyb, mozne_ukoncenia
+
+n = 5
+
+urovne = {
+  {-1},
+  {1, 1, 1},
+  {1, 1, 2, 3, 3, 3, 3},
+  {1, 1, 3, 3, 3, 5},
+  {2, 2}
+}
+
+u = 2 + 1
+k = 5
+q = 7
+
+pohyb = {"H", "D", "D", "H", "H", "H", "D"}
+mozne_ukoncenia = {}
+\end{lstlisting}
+
+\subsection{Funkcia koniec}
+
+
+Táto funkcia pridá do množiny \textbf{\textit{mozne\_zakoncenia}} bod \textbf{\textit{\{u, k\}}}, ak ho už množina neobsahuje.
+
+
+\begin{lstlisting}
+function koniec(u, k)
+  for i, ukoncenie in ipairs(mozne_ukoncenia) do
+    if ukoncenie.u == u and ukoncenie.k == k then
+      return
+    end
+  end
+  table.insert(mozne_ukoncenia, {u = u, k = k})
+end
+\end{lstlisting}
+
+\subsection{Funkcia spocitaj\_moznosti}
+
+Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \textbf{\textit{koniec}} pre urćitú pozíciu \textbf{\textit{u, k}}.
+Ak sa mravec v \textbf{\textit{n}}-tom kroku pohol smerom hore (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí rekurzívne pre komôrku \textbf{\textit{urovne[u][k]}} na úrovni \textbf{\textit{u - 1}}.
+Naopak, ak sa mravec pohne smerom dole (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí pre každú komôrku na úrovni \textbf{\textit{u + 1}}, ktorá ukazuje na komôrku \textbf{\textit{u, k}}.
+Pri každom rekurzívnom spustení funkcie sa navýši premenná \textbf{\textit{krok}} o \textbf{\textit{1}}.
+
+\begin{lstlisting}
+function spocitaj_moznosti(u, k, krok)
+  if krok > q then
+    koniec(u, k)
+    return
+  end
+  if pohyb[krok] == "H" then
+    spocitaj_moznosti(u - 1, urovne[u][k], krok + 1)
+  else
+    if u + 1 > n then
+      return
+    end
+    for j, x in ipairs(urovne[u + 1]) do
+      if x == k then
+        spocitaj_moznosti(u + 1, j, krok + 1)
+      end
+    end
+  end
+end
+
+\end{lstlisting}
+
+\subsection{Zvyšok programu}
+
+Spustí funkciu \textbf{\textit{spocitaj\_moznosti}} pre počiatočnú komôrku \textbf{\textit{u, k}} a vypíše veľkosť množiny \textbf{\textit{mozne\_zakoncenia}} (počet rôznych možných zakončení).
+
+\begin{lstlisting}[language={[5.0]Lua}]
+spocitaj_moznosti(u, k, 1)
+print(#mozne_ukoncenia)
+\end{lstlisting}
+
+\end{document}
