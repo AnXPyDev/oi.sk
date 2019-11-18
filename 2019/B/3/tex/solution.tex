@@ -20,7 +20,7 @@
 
 \section{Súťažná úloha}
 
-Tento program je zapísaný v jazyku Lua, \textbf{v ktorom jazyku sa indexy množín začínajú od 1}.
+Tento program je zapísaný v jazyku Lua, \textbf{v ktorom sa indexy množín začínajú od 1}.
 
 
 \subsection{Inicializácia premenných podľa zadania}
@@ -55,19 +55,20 @@ Táto funkcia pridá do množiny \textbf{\textit{mozne\_zakoncenia}} bod \textbf
 \begin{lstlisting}
 function koniec(u, k)
   for i, ukoncenie in ipairs(mozne_ukoncenia) do
-    if ukoncenie.u == u and ukoncenie.k == k then
+    if ukoncenie[1] == u and ukoncenie[2] == k then
       return
     end
   end
-  table.insert(mozne_ukoncenia, {u = u, k = k})
+  table.insert(mozne_ukoncenia, {u, k})
 end
 \end{lstlisting}
 
 \subsection{Funkcia spocitaj\_moznosti}
 
-Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \textbf{\textit{koniec}} pre urćitú pozíciu \textbf{\textit{u, k}}.
-Ak sa mravec v \textbf{\textit{n}}-tom kroku pohol smerom hore (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí rekurzívne pre komôrku \textbf{\textit{urovne[u][k]}} na úrovni \textbf{\textit{u - 1}}.
-Naopak, ak sa mravec pohne smerom dole (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí pre každú komôrku na úrovni \textbf{\textit{u + 1}}, ktorá ukazuje na komôrku \textbf{\textit{u, k}}.
+Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \textbf{\textit{koniec}} pre určitú pozíciu \textbf{\textit{u, k}}.
+Ak sa mravec v \textbf{\textit{n}}-tom kroku pohol smerom hore (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí rekurzívne pre komôrku s poradovým číslom \textbf{\textit{urovne[u][k]}} na úrovni \textbf{\textit{u - 1}} (tú, na ktorú ukazuje komôrka \textbf{\textit{u, k}}).
+Naopak, ak sa mravec pohne smerom dolu (\textbf{\textit{pohyb[krok] == ``D''}}), funkcia sa spustí pre každú komôrku na úrovni \textbf{\textit{u + 1}}, ktorá ukazuje na komôrku \textbf{\textit{u, k}} (\textbf{\textit{urovne[u+1][j] == k}}).
+
 Pri každom rekurzívnom spustení funkcie sa navýši premenná \textbf{\textit{krok}} o \textbf{\textit{1}}.
 
 \begin{lstlisting}
@@ -78,12 +79,12 @@ function spocitaj_moznosti(u, k, krok)
   end
   if pohyb[krok] == "H" then
     spocitaj_moznosti(u - 1, urovne[u][k], krok + 1)
-  else
+  elseif pohyb[krok] == "D" then
     if u + 1 > n then
       return
     end
-    for j, x in ipairs(urovne[u + 1]) do
-      if x == k then
+    for j, _ in ipairs(urovne[u + 1]) do
+      if urovne[u + 1][j] == k then
         spocitaj_moznosti(u + 1, j, krok + 1)
       end
     end
@@ -94,7 +95,7 @@ end
 
 \subsection{Zvyšok programu}
 
-Spustí funkciu \textbf{\textit{spocitaj\_moznosti}} pre počiatočnú komôrku \textbf{\textit{u, k}} a vypíše veľkosť množiny \textbf{\textit{mozne\_zakoncenia}} (počet rôznych možných zakončení).
+Funkcia \textbf{\textit{spocitaj\_moznosti}} je spustená pre počiatočnú komôrku \textbf{\textit{u, k}} a vypíše veľkosť množiny \textbf{\textit{mozne\_zakoncenia}} (počet rôznych možných zakončení).
 
 \begin{lstlisting}[language={[5.0]Lua}]
 spocitaj_moznosti(u, k, 1)
