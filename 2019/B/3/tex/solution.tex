@@ -68,7 +68,6 @@ end
 Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \textbf{\textit{koniec}} pre určitú pozíciu \textbf{\textit{u, k}}.
 Ak sa mravec v \textbf{\textit{n}}-tom kroku pohol smerom hore (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí rekurzívne pre komôrku s poradovým číslom \textbf{\textit{urovne[u][k]}} na úrovni \textbf{\textit{u - 1}} (tú, na ktorú ukazuje komôrka \textbf{\textit{u, k}}).
 Naopak, ak sa mravec pohne smerom dolu (\textbf{\textit{pohyb[krok] == ``D''}}), funkcia sa spustí pre každú komôrku na úrovni \textbf{\textit{u + 1}}, ktorá ukazuje na komôrku \textbf{\textit{u, k}} (\textbf{\textit{urovne[u+1][j] == k}}).
-
 Pri každom rekurzívnom spustení funkcie sa navýši premenná \textbf{\textit{krok}} o \textbf{\textit{1}}.
 
 \begin{lstlisting}
