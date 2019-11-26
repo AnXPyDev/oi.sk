@@ -49,7 +49,7 @@ mozne_ukoncenia = {}
 \subsection{Funkcia koniec}
 
 
-Táto funkcia pridá do množiny \textbf{\textit{mozne\_zakoncenia}} bod \textbf{\textit{\{u, k\}}}, ak ho už množina neobsahuje.
+Táto funkcia pridá do množiny \(mozne\_zakoncenia\) bod \({u, k}\), ak ho už množina neobsahuje.
 
 
 \begin{lstlisting}
@@ -65,10 +65,10 @@ end
 
 \subsection{Funkcia spocitaj\_moznosti}
 
-Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \textbf{\textit{koniec}} pre určitú pozíciu \textbf{\textit{u, k}}.
-Ak sa mravec v \textbf{\textit{n}}-tom kroku pohol smerom hore (\textbf{\textit{pohyb[krok] == ``H''}}), funkcia sa spustí rekurzívne pre komôrku s poradovým číslom \textbf{\textit{urovne[u][k]}} na úrovni \textbf{\textit{u - 1}} (tú, na ktorú ukazuje komôrka \textbf{\textit{u, k}}).
-Naopak, ak sa mravec pohne smerom dolu (\textbf{\textit{pohyb[krok] == ``D''}}), funkcia sa spustí pre každú komôrku na úrovni \textbf{\textit{u + 1}}, ktorá ukazuje na komôrku \textbf{\textit{u, k}} (\textbf{\textit{urovne[u+1][j] == k}}).
-Pri každom rekurzívnom spustení funkcie sa navýši premenná \textbf{\textit{krok}} o \textbf{\textit{1}}.
+Táto funkcia je rekurzívna, a je spustená pre každú komôrku, do ktorej sa mravec môže dostať. Ak sa dostane na posledný krok, zavolá funkciu \(koniec\) pre určitú pozíciu \(u, k\).
+Ak sa mravec v \(n\)-tom kroku pohol smerom hore (\(pohyb[krok] == ``H''\)), funkcia sa spustí rekurzívne pre komôrku s poradovým číslom \(urovne[u][k]\) na úrovni \(u - 1\) (tú, na ktorú ukazuje komôrka \(u, k\)).
+Naopak, ak sa mravec pohne smerom dolu (\(pohyb[krok] == ``D''\)), funkcia sa spustí pre každú komôrku na úrovni \(u + 1\), ktorá ukazuje na komôrku \(u, k\) (\(urovne[u+1][j] == k\)).
+Pri každom rekurzívnom spustení funkcie sa navýši premenná \(krok\) o \(1\).
 
 \begin{lstlisting}
 function spocitaj_moznosti(u, k, krok)
@@ -94,7 +94,7 @@ end
 
 \subsection{Zvyšok programu}
 
-Funkcia \textbf{\textit{spocitaj\_moznosti}} je spustená pre počiatočnú komôrku \textbf{\textit{u, k}} a vypíše veľkosť množiny \textbf{\textit{mozne\_zakoncenia}} (počet rôznych možných zakončení).
+Funkcia \(spocitaj\_moznosti\) je spustená pre počiatočnú komôrku \(u, k\) a vypíše veľkosť množiny \(mozne\_zakoncenia\) (počet rôznych možných zakončení).
 
 \begin{lstlisting}[language={[5.0]Lua}]
 spocitaj_moznosti(u, k, 1)
