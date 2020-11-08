@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+
+\geometry{margin=0.75in}
+
+
+\begin{document}
+
+\title{Riešenie 3. úlohy kategórie A}
+\author{Jozef Komáromy}
+
+\maketitle
+
+\lstset{
+  numberstyle=\small,
+  frame=single,
+  language={Python}
+}
+
+\section{Súťažná úloha}
+
+Tento program je zapísaný v jazyku Python.
+
+\subsection{Inicializácia premenných}
+
+\subsubsection*{Zadané údaje}
+$n$, $k$ a $a$ sú konštanty - počas behu programu sa nemenia. Konštanta $a$ je list, ktorého prvkami sú šírky stánkov $a_{1}, a_{2} ... a_{n}$. V programe zodpovedá prvému stánku index $0$.
+\begin{lstlisting}
+n = 7
+k = 600
+a = [200, 100, 200, 300, 200, 200, 100]
+\end{lstlisting}
+\subsubsection*{Premenné pre uloženie výsledných hodnôt}
+\begin{lstlisting}
+vysledok_d = 0
+vysledok_l = 0
+\end{lstlisting}
+
+\subsection{Hlavný algoritmus}
+
+Tento algoritmus pre každý stánok nájde počet stánkov ktoré celtou možno zakryť ak zakryjeme daný stánok ako prvý. Napriek tomu, že tento proces vykonávame pre každý jeden stánok, algoritmus používa výsledky platné pre predchádzajuci stánok ako základ pre ďaľšie výpočty.
+
+Algoritmus pracuje s rozmedzím stánkov, ktoré určujú premenné $l$ a $r$. Premenná $l$ je indexom prvého stánku tohto rozmedzia a premenná $r$ indexom posledného. Súčet šírok stánkov v tomto rozmedzí, dĺžka celty potrebnej na zakrytie tohto rozmedzia, je uložený v premennej $p$.
+
+Počiatočné hodnoty týchto premenných zahŕňajú všetky stánky. Preto $l = 0$ je prvý stánok a $r = n - 1$ je posledný stánok, ich celková šírka bude súčet všetkých prvkov listu $a$ ($p = sum(a)$).
+
+\begin{lstlisting}
+l = 0
+r = n - 1
+p = sum(a)
+\end{lstlisting}
+
+Ak je celta väčšia ako všetky stánky spolu ($k >= p$), jediným riešením bude, že zakryjeme všetky stánky ($vysledok_d = n$) a začneme od prvého ($vysledok_l = 0$).
+
+\begin{lstlisting}
+if p < k:
+  vysledok_d = n
+  vysledok_l = 0
+\end{lstlisting}
+
+Naopak, ak celta nepostačuje ani na zakrytie najmenšieho stánku ($k < min(a)$), riešením bude že sa nedá zakryť žiadny stánok (program vypíše \"0 0\").
+
+\begin{lstlisting}
+elif k < min(a):
+  vysledok_d = 0
+  vysledok_l = 0
+\end{lstlisting}
+
+Algoritmus pre každý stánok $l$ od prvého po posledný nájde stánok $r$, ktorý sa ako posledný dá zakryť celtou natiahnutou od stánku $l$.
+
+\begin{lstlisting}
+else:
+  while l <= n:
+\end{lstlisting}
+
+Pokiaľ je rozmedzie menšie ako celta ($p < k$), pridávame na pravú stranu rozmedzia ďaľší stánok zväčšením indexu $r$ o $1$ ($r += 1$) a k veľkosti rozmedzia pridáme veľkosť novo pridaného stánku ($a[r]$).
+Podmienka ($r + 1 < n$) bráni tomu aby v niektorých prípadoch prekročilo rozmedzie za posledný stánok.
+
+\begin{lstlisting}
+    while p < k and r + 1 < n:
+      r += 1
+      p += a[r]
+\end{lstlisting}
+
+Pokiaľ je rozmedzie väčšie ako celta ($p > k$), odoberáme z pravej strany rozmedzia posledný stánok odčítaním veľkosti posledného stánku od veľkosti rozmedzia ($r -= 1$) a zmenšením indexu $r$ o $1$ ($r -= 1$).
+Podmienka ($l + 1 < r$) bráni tomu aby sa vo výnimočných prípadoch pravá hranica rozmedzia dostala pred ľavú.
+
+\begin{lstlisting}
+    while p > k and l + 1 < r:
+      p -= a[r]
+      r -= 1
+\end{lstlisting}
+
+Vypočítame $d$, počet stánkov v rozmedzí.
+
+\begin{lstlisting}
+    d = r - l
+\end{lstlisting}
+
+Skontrolujeme či celta skutočne dokáže zakryť rozmedzie podmienkou $k >= p$ a či nové riešenie $d$ je lepšie ako posledné najlepšie ($d > vysledok_d$). Ak áno, nastavýme premenné výsledkov na nové riešenie.
+
+\begin{lstlisting}
+    if k >= p and d > vysledok_d:
+      vysledok_d = d
+      vysledok_l = l
+\end{lstlisting}
+
+Z ľavej strany rozmedzia odoberieme prvý stánok: odčítame veľkosť prvého stánku rozmedzia ($p -= a[l]$) a ľavú hranicu $l$ posunieme o $0$ ($l += 1$). Po tomto kroku sa cyklus opakuje pre ďaľší stánok až po posledný.
+
+\begin{lstlisting}
+    p -= a[l]
+    l += 1
+\end{lstlisting}
+    
+Vypíšeme výsledok. K výslednej hodnote $l$ pridáme $0$, pretože je indexom pythonového listu (začína od $0$).
+
+\begin{lstlisting}
+print(vysledok_d, vysledok_l + 1)
+\end{lstlisting}
+
+\end{document}
