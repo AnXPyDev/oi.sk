@@ -3,6 +3,9 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{caption}
+
+\renewcommand{\figurename}{Obrázok}
 
 \graphicspath{ {../images/} }
 
@@ -45,5 +48,35 @@ for x in range(N):
     print(Read(y * N + x), end = " ")
   print("", end = "\n")
 \end{lstlisting}
+
+\section*{Podúloha C}
+
+\subsection*{Jednoduché riešenie}
+
+\textbf{Toto riešenie je použité len ako príklad, nie je mojím konečným riešením pre túto podúlohu.}
+\newline
+Najjednoduchším riešením by bolo prečítať maticu po stĺpcoch zo dola hore a z ľava do prava a v tom istom poradí ako ju čítame ju zapísať na disk za pôvodnú maticu. Potom by sme túto otočenú maticu znovu prepísali na pôvodné miesto. Tento spôsob je však veľmi neefektívny, pretože je potrebné s každým prvkom matice urobiť 4 operácie na disku, ktoré sú oveľa pomalšie ako operácie s pamäťou. Tento spôsob taktiež potrebuje aby sa na disku bolo dostatočné voľné miesto pre druhú maticu rovnakých rozmerov.
+
+\begin{lstlisting}
+for y in range(N):
+  for x in range(N):
+    Write(N * N + y * N + x, Read(x * N + (N - y - 1)))
+
+for i in range(N * N):
+  Write(i, Read(N * N + i))
+\end{lstlisting}
+
+\subsection*{Efektívne riešenie}
+
+Aby bolo riešenie efektívne, nechceme aby používalo viac miesta na disku ako zaberá pôvodná matica.
+Aby sme otočili maticu bez ukladania údajov na disk, budeme postupne otáčať páry každých štyroch prvkov v smere hodinových ručičiek.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.35\textwidth]{process}
+  \caption{Proces otáčania matice}
+\end{figure}
+
+Na obrázku 1 je znázornený proces otáčania matice s rozmerom \textit{n = 4}. Najskôr začneme prvkom v ľavom hornom rohu, presunieme ho do pravého horného rohu, prvok z pravého horného rohu presunieme do pravého dolného rohu, prvok z pravého dolného rohu do ľavého doného rohu, a nakoniec sa vrátime na začiatok do ľavého horného rohu, kde umiestnime prvok z ľavého dolného rohu. Takto sme otočili jednu štvoricu prvkov. Ďalej postúpime k žltej štvorici prvkov. Spravidla začíname tento postup pre štvoricu prvkov od prvku nachádzajuceho sa na hornej strane matice/vnútornej pod-matice. V prípade žltej štvorice teda začneme s prvkom 2 a postupujeme v poradí 2, 8, 15, 9. Takto budeme postupovať pre každý prvok hornej strany matice okrem posledného, ktorý už bol otočený s prvým. Keď prejdeme prvý riadok, posunieme sa na ďaľší. Prvý prvok ďaľšieho riadku už bol otočený pri otáčaní prvkov predchádzajúceho riadku. Preto sa vždy na novom riadku presunieme o jeden prvok do prava (ak číslujeme riadky od \textit{1}, na riadku \textit{y} začneme prvkom \textit{y}-tým v poradí). Posledny prvok na riadku ktorý otočíme je prvok (\textit{n - y - 1})-tý v poradí. Posledný prvok ktorý otočíme sa nachádza na poslednom riadku hornej polovice matice. Ak je rozmer matice párne číslo, bude to riadok $\frac{n}{2}$, ak je nepárny bude to riadok $\frac{n - 1}{2}$.
 
 \end{document}
