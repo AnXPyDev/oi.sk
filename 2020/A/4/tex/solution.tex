@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\graphicspath{ {../images/} }
+
+\geometry{margin=0.75in}
+
+
+\begin{document}
+
+\title{Riešenie 4. úlohy kategórie A}
+\author{Jozef Komáromy}
+
+\maketitle
+
+\lstset{
+  numberstyle=\small,
+  frame=single,
+  language={Python}
+}
+
+Všetky programy sú zapísané v jazyku Python s predpokladom čísla $n$ uloženého v premennej $N$. V programoch sú použité nedefinované funkcie $Write$ a $Read$ rovnako ako v študijnom text v zadaní.
+
+\section*{Podúloha A}
+
+Všetky prvky vypíšeme po riadkoch jednoduchou iteráciou súradnice $y$ (poradie riadku, začína nulou) od $0$ po $N-1$ a iteráciou súradnice $x$ (poradie stĺpca, začína nulou) od $0$ po $N-1$ pre každú súradnicu $y$. Pre každý prvok vypočítame jeho poradie na disku vzťahom $i = y * N + x$. Nasledovne toto poradie použijeme ako argument pre funkciu $Read$ aby sme získali v poradí $i$-tý blok dát z disku ($blok = Read(i)$). Tento blok vypíšeme funkciou $print$ (\(print(blok)\)). Aby funkcia $print$ neukončila riadok a vypísala medzeru medzi prvkami, použijeme argument \(end = " "\). Celý tento proces spojíme do jedného riadku ako \(print(Read(y * N + x), end = "\ ")\). Po vypísaní každého prvku v jednom riadku (po konci vnútorného for cyklu) ukončíme riadok.
+
+\begin{lstlisting}
+for y in range(N):
+  for x in range(N):
+    print(Read(y * N + x), end = " ")
+  print("", end = "\n")
+\end{lstlisting}
+
+\section*{Podúloha B}
+
+Riešenie tejto podúlohy bude podobné ako riešenie podúlohy A. Narozdiel od podúlohy A budeme vypisovať stĺpce ako riadky. Aby sme toto dosiahly, stačí len zameniť vonkajší cyklus za vnútorný tak aby sme pre každú súradnicu $x$ vypísali všetky prvky od $y = 0$ až po $y = N-1$. Vzťah pre výpočet poradia zostane rovnaký.
+
+\begin{lstlisting}
+for x in range(N):
+  for y in range(N):
+    print(Read(y * N + x), end = " ")
+  print("", end = "\n")
+\end{lstlisting}
+
+\end{document}

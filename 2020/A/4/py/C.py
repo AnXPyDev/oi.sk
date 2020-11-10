@@ -2,7 +2,7 @@ posledny_blok = None
 blok = None
 
 for zaciatok_y in range(N // 2):
-    for zaciatok_x in range(yo, N - (yo + 1)):
+    for zaciatok_x in range(zaciatok_y, N - (zaciatok_y + 1)):
         pozicia = zaciatok_y * N + zaciatok_x
         for i in range(5):
             blok = Read(pozicia)
