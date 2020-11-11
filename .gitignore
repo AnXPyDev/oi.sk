@@ -5,3 +5,4 @@
 *.log
 .replit
 !*solution.pdf
+*_minted-solution

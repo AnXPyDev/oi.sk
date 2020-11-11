@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{geometry}
-\usepackage{listings}
 \usepackage{amsmath}
+\usepackage{minted}
 
 \geometry{margin=0.75in}
 
@@ -13,12 +13,6 @@
 
 \maketitle
 
-\lstset{
-  numberstyle=\small,
-  frame=single,
-  language={Python}
-}
-
 \section{Súťažná úloha}
 
 Tento program je zapísaný v jazyku Python.
@@ -27,16 +21,16 @@ Tento program je zapísaný v jazyku Python.
 
 \subsubsection*{Zadané údaje}
 $n$, $k$ a $a$ sú konštanty - počas behu programu sa nemenia. Konštanta $a$ je list, ktorého prvkami sú šírky stánkov $a_{1}, a_{2} ... a_{n}$. V programe zodpovedá prvému stánku index $0$.
-\begin{lstlisting}
+\begin{minted}{python}
 n = 7
 k = 600
 a = [200, 100, 200, 300, 200, 200, 100]
-\end{lstlisting}
+\end{minted}
 \subsubsection*{Premenné pre uloženie výsledných hodnôt}
-\begin{lstlisting}
+\begin{minted}{python}
 vysledok_d = 0
 vysledok_l = 0
-\end{lstlisting}
+\end{minted}
 
 \subsection{Hlavný algoritmus}
 
@@ -46,80 +40,80 @@ Algoritmus pracuje s rozmedzím stánkov, ktoré určujú premenné $l$ a $r$. P
 
 Počiatočné hodnoty týchto premenných zahŕňajú všetky stánky. Preto $l = 0$ je prvý stánok a $r = n - 1$ je posledný stánok, ich celková šírka bude súčet všetkých prvkov listu $a$ ($p = sum(a)$).
 
-\begin{lstlisting}
+\begin{minted}{python}
 l = 0
 r = n - 1
 p = sum(a)
-\end{lstlisting}
+\end{minted}
 
 Ak je celta väčšia ako všetky stánky spolu ($k >= p$), jediným riešením bude, že zakryjeme všetky stánky ($vysledok_d = n$) a začneme od prvého ($vysledok_l = 0$).
 
-\begin{lstlisting}
+\begin{minted}{python}
 if p < k:
   vysledok_d = n
   vysledok_l = 0
-\end{lstlisting}
+\end{minted}
 
 Naopak, ak celta nepostačuje ani na zakrytie najmenšieho stánku ($k < min(a)$), riešením bude že sa nedá zakryť žiadny stánok (program vypíše \"0 0\").
 
-\begin{lstlisting}
+\begin{minted}{python}
 elif k < min(a):
   vysledok_d = 0
   vysledok_l = 0
-\end{lstlisting}
+\end{minted}
 
 Algoritmus pre každý stánok $l$ od prvého po posledný nájde stánok $r$, ktorý sa ako posledný dá zakryť celtou natiahnutou od stánku $l$.
 
-\begin{lstlisting}
+\begin{minted}{python}
 else:
   while l <= n:
-\end{lstlisting}
+\end{minted}
 
 Pokiaľ je rozmedzie menšie ako celta ($p < k$), pridávame na pravú stranu rozmedzia ďaľší stánok zväčšením indexu $r$ o $1$ ($r += 1$) a k veľkosti rozmedzia pridáme veľkosť novo pridaného stánku ($a[r]$).
 Podmienka ($r + 1 < n$) bráni tomu aby v niektorých prípadoch prekročilo rozmedzie za posledný stánok.
 
-\begin{lstlisting}
+\begin{minted}{python}
     while p < k and r + 1 < n:
       r += 1
       p += a[r]
-\end{lstlisting}
+\end{minted}
 
 Pokiaľ je rozmedzie väčšie ako celta ($p > k$), odoberáme z pravej strany rozmedzia posledný stánok odčítaním veľkosti posledného stánku od veľkosti rozmedzia ($r -= 1$) a zmenšením indexu $r$ o $1$ ($r -= 1$).
 Podmienka ($l + 1 < r$) bráni tomu aby sa vo výnimočných prípadoch pravá hranica rozmedzia dostala pred ľavú.
 
-\begin{lstlisting}
+\begin{minted}{python}
     while p > k and l + 1 < r:
       p -= a[r]
       r -= 1
-\end{lstlisting}
+\end{minted}
 
 Vypočítame $d$, počet stánkov v rozmedzí.
 
-\begin{lstlisting}
+\begin{minted}{python}
     d = r - l
-\end{lstlisting}
+\end{minted}
 
 Skontrolujeme či celta skutočne dokáže zakryť rozmedzie podmienkou $k >= p$ a či nové riešenie $d$ je lepšie ako posledné najlepšie ($d > vysledok_d$). Ak áno, nastavýme premenné výsledkov na nové riešenie.
 
-\begin{lstlisting}
+\begin{minted}{python}
     if k >= p and d > vysledok_d:
       vysledok_d = d
       vysledok_l = l
-\end{lstlisting}
+\end{minted}
 
 Z ľavej strany rozmedzia odoberieme prvý stánok: odčítame veľkosť prvého stánku rozmedzia ($p -= a[l]$) a ľavú hranicu $l$ posunieme o $0$ ($l += 1$). Po tomto kroku sa cyklus opakuje pre ďaľší stánok až po posledný.
 
-\begin{lstlisting}
+\begin{minted}{python}
     p -= a[l]
     l += 1
-\end{lstlisting}
+\end{minted}
 
 \subsection{Vypísanie riešenia}
 
 Vypíšeme výsledok. K výslednej hodnote $l$ pridáme $0$, pretože je indexom pythonového listu (začína od $0$).
 
-\begin{lstlisting}
+\begin{minted}{python}
 print(vysledok_d, vysledok_l + 1)
-\end{lstlisting}
+\end{minted}
 
 \end{document}

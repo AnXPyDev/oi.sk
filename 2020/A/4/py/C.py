@@ -1,13 +1,35 @@
-posledny_blok = None
+N = 5
+
+m = [i for i in range(1, N * N + 1)]
+
+def Read(i):
+    return m[i]
+
+def Write(i, b):
+    m[i] = b
+
+def pm():
+    for y in range(N):
+        for x in range(N):
+            print(Read(y * N + x), end = " ")
+        print("", end = "\n")
+
+
+pm()
+        
 blok = None
 
-for zaciatok_y in range(N // 2):
-    for zaciatok_x in range(zaciatok_y, N - (zaciatok_y + 1)):
-        pozicia = zaciatok_y * N + zaciatok_x
+for sy in range(0, (N // 2 - 1) + 1):
+    for sx in range(sy, (N - sy - 2) + 1):
+        y = sy
+        x = sx
         for i in range(5):
-            blok = Read(pozicia)
-            Write(pozicia, posledny_blok)
-            posledny_blok = blok
-            y = pozicia // N
-            x = pozicia - y * N
-            pozicia += (2*N - ((N+1) * (y+1))) + (N-1) * x
+            tblok = Read(y * N + x)
+            Write(y * N + x, blok)
+            blok = tblok
+            x0 = x
+            y0 = y
+            x = N - y0 - 1
+            y = x0
+
+pm()
