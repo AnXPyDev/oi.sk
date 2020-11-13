@@ -117,71 +117,10 @@ void printstate(struct State* state) {
 }
 
 void findwaynr() {
-  int depth = 0;
-  struct State *stack = (struct State*)malloc(sizeof(struct State) * n * 2);
-  struct State *state = stack;
-
-  state->pos = crosses;
-  state->last = NULL;
-  state->ck = -1;
-  state->i = 0;
-
-  goto checkstate;
-
-  pushstate:;
-  if (state->last == state->pos->linked[state->i]) {
-    state->i++;
-    goto loop;
-  }
-  struct State *last = state;
-  state++;
-  depth++;
-  state->pos = last->pos->linked[last->i];
-  state->last = last->pos;
-  state->ck = last->ck - 1;
-  state->i = 0;
-  last->i++;
-
-  if (state->pos->flooded && state->ck < 0) {
-    state->ck = k;
-  }
-
-  checkstate:;
-  //printstate(state); printf(" check\n");
-  if (depth >= result && result != -1) {
-    goto popstate;
-  }
-
-  if (state->pos - crosses == n - 1) {
-    result = depth;
-    goto popstate;
-  }
-
-  if (state->ck == 0) {
-    goto popstate;
-  }
-
-  goto loop;
-
-  loop:;
-  if (state->i == state->pos->nlinked) {
-    goto popstate;
-  }
-  goto pushstate;
-
-  popstate:;
-  if (depth == 0) {
-    return;
-  }
-  state--;
-  depth--;
-  goto loop;
 }
 
 int main() {
   load();
-  //findway(crosses, NULL, -1, 0);
-  //printf("%i\n", result);
   result = -1;
   findwaynr();
   printf("%li\n", result);

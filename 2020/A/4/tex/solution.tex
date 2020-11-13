@@ -123,7 +123,7 @@ Algoritmus využíva rovnaké množstvo pamäte nezávisle od rozmeru matice, ne
 \subsubsection*{Optimalizovaný program}
 
 \begin{minted}{python}
-blok, tblok, x0, y0 = None, None, None, None
+blok, tblok, x0 = None, None, None, None
 
 for sy in range(0, (N // 2 - 1) + 1):
   for sx in range(sy, (N - sy - 2) + 1):
@@ -135,9 +135,8 @@ for sy in range(0, (N // 2 - 1) + 1):
       Write(y * N + x, blok)
       blok = tblok
       x0 = x
-      y0 = y
-      x = N - y0 - 1
-      y = x
+      x = N - y - 1
+      y = x0
     Write(sy * N + sx, blok)
 \end{minted}
 
